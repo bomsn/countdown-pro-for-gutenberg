@@ -31,8 +31,8 @@ add_action('enqueue_block_editor_assets', 'cpfg_editor_block_assets');
 function cpfg_editor_block_assets(){
 
   // Define path for the js and css files
-  $editor_js = '/assets/js/countdown.editor.build.js';
-  $editor_css = '/assets/css/countdown.editor.build.css';
+  $editor_js = '/assets/js/blocks.editor.js';
+  $editor_css = '/assets/css/blocks.editor.css';
 
    // Enqueue the bundled block JS file
    wp_enqueue_script(
@@ -60,9 +60,13 @@ function cpfg_editor_block_assets(){
 add_action('enqueue_block_assets', 'cpfg_block_assets');
 function cpfg_block_assets(){
 
+	// If in the backend, bail out.
+	if ( is_admin() ) {
+		return;
+	}
   // Define path for the js and css files
-  $block_js = '/assets/js/countdown.build.js';
-  $block_css = '/assets/css/countdown.build.css';
+  $block_js = '/assets/js/blocks.js';
+  $block_css = '/assets/css/blocks.css';
 
   // Enqueue the bundled block JS file
   wp_enqueue_script(

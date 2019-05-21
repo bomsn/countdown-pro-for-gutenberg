@@ -4,10 +4,10 @@ const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
 // Set different CSS extraction for editor only and common block styles
 const blocksCSSPlugin = new ExtractTextPlugin( {
-  filename: './assets/css/countdown.css',
+  filename: './assets/css/blocks.css',
 } );
 const editBlocksCSSPlugin = new ExtractTextPlugin( {
-  filename: './assets/css/countdown.editor.css',
+  filename: './assets/css/blocks.editor.css',
 } );
 
 // Configuration for the ExtractTextPlugin.
@@ -34,8 +34,8 @@ const extractConfig = {
 module.exports = {
   mode: 'development',
   entry: {
-    './assets/js/countdown.editor.build' : './block/js/countdown.editor.js',
-    './assets/js/countdown.build' : './block/js/countdown.js',
+    './assets/js/blocks.editor' : './blocks/index.js',
+    './assets/js/blocks' : './blocks/frontend.js',
   },
   output: {
     path: path.resolve( __dirname ),
@@ -53,11 +53,11 @@ module.exports = {
         },
       },
       {
-        test: /countdown\.s?css$/,
+        test: /style\.s?css$/,
         use: blocksCSSPlugin.extract( extractConfig ),
       },
       {
-        test: /countdown.editor\.s?css$/,
+        test: /editor\.s?css$/,
         use: editBlocksCSSPlugin.extract( extractConfig ),
       },
     ],
