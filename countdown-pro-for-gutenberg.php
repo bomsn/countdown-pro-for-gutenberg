@@ -61,9 +61,9 @@ add_action('enqueue_block_assets', 'cpfg_block_assets');
 function cpfg_block_assets(){
 
 	// If in the backend, bail out.
-	if ( is_admin() ) {
-		return;
-	}
+	// if ( is_admin() ) {
+	// 	return;
+	// }
   // Define path for the js and css files
   $block_js = '/assets/js/blocks.js';
   $block_css = '/assets/css/blocks.css';

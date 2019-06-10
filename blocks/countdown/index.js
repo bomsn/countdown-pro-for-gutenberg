@@ -2,10 +2,6 @@
  * WordPress dependencies
  */
 const { __ } = window.wp.i18n;
-const { createElement } = window.wp.element;
-const { DateTimePicker } = window.wp.components;
-const { __experimentalGetSettings } = window.wp.date;
-const { withState } = window.wp.compose;
 
 /**
  * Internal dependencies
@@ -17,11 +13,8 @@ import save from './save';
 /**
  * Starting
  */
+
 export const name = 'cpfg/countdown';
-
-
-const defaultDateTime = moment().add(7, 'days');
-const dateTimeFormat = 'YYYY-MM-DD HH:mm';
 
 export const settings = {
         // Localize title using wp.i18n.__()
@@ -42,51 +35,85 @@ export const settings = {
         styles: [
             // Mark style as default.
             {
-                name: 'default',
-                label: __( 'Rounded' ),
+                name: 'square',
+                label: __( 'Square' ),
                 isDefault: true
             },
             {
-                name: 'outline',
-                label: __( 'Outline' )
+                name: 'circular',
+                label: __( 'Circular' )
             },
-            {
-                name: 'squared',
-                label: __( 'Squared' )
-            }
         ],
         // Block supprt
         supports: {
           html: false,
+          className: true,
+          GeneratedClassname: true,
         },
         // Attributes set for each piece of dynamic data used in your block
         attributes: {
+            className: {
+                type: 'string',
+            },
             datetime: {
                 type: 'string',
-                default: defaultDateTime.format( dateTimeFormat )
-            }
+                default: ''
+            },
+            message: {
+                type: 'string',
+                default: 'Sorry you are late!'
+            },
+            days: {
+                type: 'boolean',
+                default: true
+            },
+            hours: {
+                type: 'boolean',
+                default: true
+            },
+            minutes: {
+                type: 'boolean',
+                default: true
+            },
+            seconds: {
+                type: 'boolean',
+                default: true
+            },
+            animation: {
+                type: 'string',
+                default: 'none'
+            },
+            bgcolor: {
+                type: 'string',
+                default: 'none'
+            },
+            progress: {
+                type: 'boolean',
+                default: false
+            },
+            fontsize: {
+                type: 'number',
+                default: 45
+            },
+            bordersize: {
+                type: 'string',
+                default: '2'
+            },
+            digitscolor: {
+                type: 'string',
+                default: 'none'
+            },
+            labelscolor: {
+                type: 'string',
+                default: 'none'
+            },
+            bordercolor: {
+                type: 'string',
+                default: 'none'
+            },
         },
         // Determines what is displayed in the editor
-        edit: ( { attributes, setAttributes } ) => {
-            const onUpdateDate = ( val ) => {
-                setAttributes( { datetime: val } );
-            }
-            const settings = __experimentalGetSettings();
-            const is12HourTime = /a(?!\\)/i.test(
-              settings.formats.time
-                .toLowerCase() // Test only the lower case a
-                .replace( /\\\\/g, '' ) // Replace "//" with empty strings
-                .split( '' ).reverse().join( '' ) // Reverse the string and test for "a" not followed by a slash
-            );
-
-            return (
-              <div></div>
-            );
-        },
+        edit: edit,
         // Determines what is displayed on the frontend
-        save: ( { attributes } ) => {
-            return (
-              <div></div>
-            );
-        },
+        save: save,
 };
