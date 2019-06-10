@@ -2,6 +2,7 @@
    * WordPress dependencies
    */
   const { __ } = window.wp.i18n;
+  const { dispatch } = window.wp.data;
 
   export const getElementCountClassName  = ( days, hours, minutes, seconds ) => {
     var count = 0;
@@ -49,6 +50,16 @@
       return checked ? label + __( ' enabled.' ) : __( 'Toggle to enable ' ) + label;
     }
 
+  };
+
+  export const getCurrentStyle = ( classNames ) => {
+
+    const isStyle = RegExp(/is-style-/)
+    const styleName = isStyle.test(classNames)
+        ? classNames.replace(isStyle, '')
+        : null
+
+    return styleName;
   };
 
   export const rgb = ( r, g, b, a ) => {

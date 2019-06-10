@@ -6,13 +6,14 @@ import classnames from 'classnames';
 /**
  * Internal dependencies
  */
-import {getElementCountClassName, getSwitchHelp, rgb, fontSizes} from './helpers';
+import {getElementCountClassName, getSwitchHelp, getCurrentStyle, rgb, fontSizes} from './helpers';
 import {handleEditorChanges} from './frontend';
 
 /**
  * WordPress dependencies
  */
 const { __ } = window.wp.i18n;
+const { dispatch } = window.wp.data;
 const { InspectorControls } = window.wp.editor;
 const { Fragment, createElement } = window.wp.element;
 const { Panel, PanelBody, PanelRow, DateTimePicker, TextareaControl, ToggleControl, SelectControl, FontSizePicker, ColorPicker } = window.wp.components;
@@ -39,6 +40,7 @@ export default function edit( { attributes, setAttributes } ) {
 		borderWidthClassName,
    );
 
+  const currentStyle = getCurrentStyle( className );
   const onUpdateDate = ( dateTime ) => {
       var newDateTime = moment(dateTime).format( 'YYYY-MM-DD HH:mm' );
       setAttributes( { datetime: newDateTime } );
@@ -64,18 +66,6 @@ export default function edit( { attributes, setAttributes } ) {
     setTimeout(function(){
       handleEditorChanges(false, false, true);
     }, 300);
-  };
-
-  const onUpdateProgress = ( val ) => {
-
-    setAttributes({
-        progress: val
-    });
-
-    setTimeout(function(){
-      handleEditorChanges(false, false, true);
-    }, 300);
-
   };
 
   const onUpdateAnimation = ( animation ) => {
@@ -121,6 +111,30 @@ export default function edit( { attributes, setAttributes } ) {
     }, 300);
   };
 
+  const onUpdateProgress = ( val ) => {
+
+    if( val === true && currentStyle !== 'circular' ){
+
+      dispatch('core/notices').createNotice(
+    		'warning', // Can be one of: success, info, warning, error.
+    		__('Visual progress only works on countdown circular style.'), // Text string to display.
+    		{
+    			isDismissible: true, // Whether the user can dismiss the notice.
+    		}
+    	);
+
+      return;
+    }
+
+    setAttributes({
+        progress: val
+    });
+
+    setTimeout(function(){
+      handleEditorChanges(false, false, true);
+    }, 300);
+
+  };
 
   const settings = __experimentalGetSettings();
   const is12HourTime = /a(?!\\)/i.test(
@@ -130,6 +144,10 @@ export default function edit( { attributes, setAttributes } ) {
       .split( '' ).reverse().join( '' ) // Reverse the string and test for "a" not followed by a slash
   );
 
+  // Make sure to change `progress` attribute value to false if the current style is not circular
+  if( currentStyle !== 'circular' && progress === true ){
+    onUpdateProgress(false);
+  }
 
   return (
     <Fragment>
@@ -312,10 +330,19 @@ export default function edit( { attributes, setAttributes } ) {
                 </PanelRow>
                 <PanelRow className={ 'cpfg-panelrow-no-flex' }>
                   <label class="components-base-control__label">Background Color</label>
-                  <ColorPicker
-                      color={ bgcolor }
-                      onChangeComplete={ ( val ) => setAttributes({ bgcolor: rgb(val.rgb.r, val.rgb.g, val.rgb.b, val.rgb.a) }) }
-                  />
+                  { currentStyle == 'circular' ? (
+                    <ColorPicker
+                        color={ bgcolor }
+                        onChangeComplete={ ( val ) => setAttributes({ bgcolor: rgb(val.rgb.r, val.rgb.g, val.rgb.b, val.rgb.a) }) }
+                        disableAlpha
+                    />
+                  ):(
+                    <ColorPicker
+                        color={ bgcolor }
+                        onChangeComplete={ ( val ) => setAttributes({ bgcolor: rgb(val.rgb.r, val.rgb.g, val.rgb.b, val.rgb.a) }) }
+                    />
+                  )}
+
                 </PanelRow>
             </PanelBody>
       </InspectorControls>
