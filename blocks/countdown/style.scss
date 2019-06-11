@@ -159,10 +159,10 @@ span.cpfg-label {
 .cpfg-labels-light .cpfg-label {
     color: $light;
 }
-.cpfg-digits-gery .cpfg-digits {
+.cpfg-digits-grey .cpfg-digits {
     color: $grey;
 }
-.cpfg-labels-gery .cpfg-label {
+.cpfg-labels-grey .cpfg-label {
     color: $grey;
 }
 .cpfg-digits-blue .cpfg-digits{
@@ -299,19 +299,19 @@ span.cpfg-label {
 * Animations
 */
 
-.cpfg-animation-fadein {
+[data-animation="fadein"] {
     opacity: 1;
     animation-name: cpfgFadeIn;
     animation-duration: 3s;
     animation-iteration-count: 1;
 }
-.cpfg-animation-bounceinleft {
+[data-animation="bounceinleft"] {
     opacity: 1;
     animation-name: cpfgBounceInLeft;
     animation-duration: 3s;
     animation-iteration-count: 1;
 }
-.cpfg-animation-bounceinright {
+[data-animation="bounceinright"] {
     opacity: 1;
     animation-name: cpfgBounceInRight;
     animation-duration: 3s;

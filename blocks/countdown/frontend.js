@@ -124,7 +124,7 @@
       }
   };
 
-  const startCounter = function ( animate = false, animation = false, refresh = false, enableProgress = false ){
+  const startCounter = function ( refresh = false ){
 
     var elements = document.getElementsByClassName('cpfg-countdown'),
         daysOfYear = daysOfTheYear(new Date().getFullYear());
@@ -135,21 +135,6 @@
 
       // Hide element if `refresh` is true
       element.style.visibility = 'hidden';
-      // Make sure the animation is applied
-      if( animation === false ){
-         animation = element.dataset.animation;
-      }
-
-      if( animate && animation !== 'none' ){
-
-          elementClasses.forEach(className => {
-            if (className.startsWith('cpfg-animation')) {
-              element.classList.remove(className);
-            }
-          });
-
-          elementClasses.add('cpfg-animation-'+animation+'');
-      }
 
       var counters = '';
       // Remove JS created elements if `refresh` is true
@@ -230,7 +215,7 @@
 
    document.addEventListener("DOMContentLoaded", function(){
      if( typeof(document.getElementsByClassName('cpfg-countdown')[0]) !== 'undefined' ){
-       startCounter(true);
+       startCounter();
      };
    });
 
@@ -239,14 +224,14 @@
     */
 
     // Handle backend changes
-    export const handleEditorChanges =  function( animate = false, animation = false, refresh = false, enableProgress = false ){
+    export const handleEditorChanges =  function( refresh = false ){
 
       if(refresh){
         // Stop all existing counter
         stopCounter();
       }
       // Reload
-      startCounter( animate, animation, refresh, enableProgress );
+      startCounter( refresh );
 
     }
 

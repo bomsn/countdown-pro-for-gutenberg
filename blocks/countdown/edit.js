@@ -15,14 +15,14 @@ import {handleEditorChanges} from './frontend';
 const { __ } = window.wp.i18n;
 const { dispatch } = window.wp.data;
 const { InspectorControls } = window.wp.editor;
-const { Fragment, createElement } = window.wp.element;
+const { Fragment, createElement, useEffect } = window.wp.element;
 const { Panel, PanelBody, PanelRow, DateTimePicker, TextareaControl, ToggleControl, SelectControl, FontSizePicker, ColorPicker } = window.wp.components;
-const { __experimentalGetSettings } = window.wp.date;
 
 export default function edit( { attributes, setAttributes } ) {
 
   const { className, datetime, message, days, hours, minutes, seconds, animation, bgcolor, progress, fontsize, bordersize, digitscolor, labelscolor, bordercolor } = attributes;
 
+  // Prepare element classes
 	const elementCountClassName = getElementCountClassName(days, hours, minutes, seconds);
   const digitsColorClassName = digitscolor != 'none' ? 'cpfg-digits-' + digitscolor : false;
   const labelsColorClassName = labelscolor != 'none' ? 'cpfg-labels-' + labelscolor : false;
@@ -40,43 +40,38 @@ export default function edit( { attributes, setAttributes } ) {
 		borderWidthClassName,
    );
 
+  // Get the current block style
   const currentStyle = getCurrentStyle( className );
-  const onUpdateDate = ( dateTime ) => {
-      var newDateTime = moment(dateTime).format( 'YYYY-MM-DD HH:mm' );
-      setAttributes( { datetime: newDateTime } );
 
-      document.getElementsByClassName('cpfg-countdown')[0].dataset.datetime;
-      setTimeout(function(){
-        handleEditorChanges();
-      }, 300);
+  /**
+   * Handlers to the be called onChange event,
+   * setting attribute values differently.
+   */
+
+  const onUpdateDate = ( dateTime ) => {
+    var newDateTime = moment(dateTime).format( 'YYYY-MM-DD HH:mm' );
+    setAttributes( { datetime: newDateTime } );
   };
 
   const onUpdateMessage = ( message ) => {
     setAttributes({
         message: message
     });
-    handleEditorChanges();
+  };
+
+  const onUpdateAnimation = ( val ) => {
+    setAttributes({
+        animation: val
+    });
   };
 
   const onUpdateBorders = ( val ) => {
     setAttributes({
         bordersize: val
     });
-
-    setTimeout(function(){
-      handleEditorChanges(false, false, true);
-    }, 300);
-  };
-
-  const onUpdateAnimation = ( animation ) => {
-    setAttributes({
-        animation: animation
-    });
-    handleEditorChanges( true, animation );
   };
 
   const onUpdateSettings = ( val, type ) => {
-
     // Make sure not all counters are turned off
     if( [days,hours,minutes,seconds].filter(v => v).length === 1 && val === false  ){
       return;
@@ -105,14 +100,10 @@ export default function edit( { attributes, setAttributes } ) {
           seconds: val
       });
     }
-
-    setTimeout(function(){
-      handleEditorChanges(false, false, true);
-    }, 300);
   };
 
   const onUpdateProgress = ( val ) => {
-
+    // Add notice if user is trying to apply progress indicator while current style is not circular
     if( val === true && currentStyle !== 'circular' ){
 
       dispatch('core/notices').createNotice(
@@ -129,25 +120,34 @@ export default function edit( { attributes, setAttributes } ) {
     setAttributes({
         progress: val
     });
-
-    setTimeout(function(){
-      handleEditorChanges(false, false, true);
-    }, 300);
-
   };
 
-  const settings = __experimentalGetSettings();
-  const is12HourTime = /a(?!\\)/i.test(
-    settings.formats.time
-      .toLowerCase() // Test only the lower case a
-      .replace( /\\\\/g, '' ) // Replace "//" with empty strings
-      .split( '' ).reverse().join( '' ) // Reverse the string and test for "a" not followed by a slash
-  );
+  /**
+   * `useEffect` will run after the render is committed to the screen
+   * By default, effects run after every completed render,
+   * but you can choose to fire it only when certain values have changed as below.
+   */
 
-  // Make sure to change `progress` attribute value to false if the current style is not circular
+  // Instantly update the counter after values updated
+  useEffect( () => {
+    handleEditorChanges();
+	}, [datetime, message] );
+
+  // Clear all timers, JS added content and reload the counter again
+  useEffect( () => {
+    handleEditorChanges(true);
+  }, [bordersize, days, hours, minutes, seconds, progress] );
+
+
+  /**
+   * Make sure to change `progress` attribute value to false
+   * if the current style is not circular
+   */
+
   if( currentStyle !== 'circular' && progress === true ){
-    onUpdateProgress(false);
+      onUpdateProgress(false);
   }
+
 
   return (
     <Fragment>
