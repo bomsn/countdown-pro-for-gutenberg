@@ -1,48 +1,28 @@
-const path = require( 'path' );
-const webpack = require( 'webpack' );
-const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
-
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Set different CSS extraction for editor only and common block styles
-const blocksCSSPlugin = new ExtractTextPlugin( {
+const blocksCSSPlugin = new MiniCssExtractPlugin({
   filename: './assets/css/blocks.css',
-} );
-const editBlocksCSSPlugin = new ExtractTextPlugin( {
+});
+const editBlocksCSSPlugin = new MiniCssExtractPlugin({
   filename: './assets/css/blocks.editor.css',
-} );
-
-// Configuration for the ExtractTextPlugin.
-const extractConfig = {
-  use: [
-    { loader: 'raw-loader' },
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: [ require( 'autoprefixer' ) ],
-      },
-    },
-    {
-      loader: 'sass-loader',
-      query: {
-        outputStyle:
-          'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
-      },
-    },
-  ],
-};
+});
 
 
 module.exports = {
   mode: 'development',
   entry: {
-    './assets/js/blocks.editor' : './blocks/index.js',
-    './assets/js/blocks' : './blocks/frontend.js',
+    './assets/js/blocks.editor': './blocks/index.js',
+    './assets/js/blocks': './blocks/frontend.js',
   },
   output: {
-    path: path.resolve( __dirname ),
+    // path: path.resolve(__dirname),
+    path: __dirname,
     filename: '[name].js',
   },
   watch: 'production' !== process.env.NODE_ENV,
-  devtool: 'cheap-eval-source-map',
+  devtool: 'eval-cheap-source-map',
   module: {
     rules: [
       {
@@ -54,11 +34,46 @@ module.exports = {
       },
       {
         test: /style\.s?css$/,
-        use: blocksCSSPlugin.extract( extractConfig ),
+        use: [
+          { loader: blocksCSSPlugin.loader },
+          { loader: 'raw-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [require('autoprefixer')],
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                outputStyle: 'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
+              }
+            },
+          },
+        ],
       },
       {
         test: /editor\.s?css$/,
-        use: editBlocksCSSPlugin.extract( extractConfig ),
+        use: [
+          { loader: editBlocksCSSPlugin.loader },
+
+          { loader: 'raw-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [require('autoprefixer')],
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                outputStyle: 'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
+              }
+            },
+          },
+        ],
       },
     ],
   },

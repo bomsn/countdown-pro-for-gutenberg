@@ -237,7 +237,7 @@
 
     // Stop the counter if countdown element is removed  // initiate it if loaded first time
     // ( Using subscribe() listener to check for changes)
-    subscribe(function () {
+    const subscription = subscribe(function () {
       var coreEditor = select('core/editor');
       var isSavingPost = coreEditor.isSavingPost();
       var isPublishingPost = coreEditor.isPublishingPost();
@@ -257,7 +257,6 @@
 
       if(foundCounter === false){
         stopCounter();
-      }else{
-        startCounter();
       }
+
     });

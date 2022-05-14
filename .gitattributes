@@ -1,0 +1,12 @@
+# exclude .gitignore and similar from the generated tarball
+.git*           export-ignore
+# exclude development files
+*.json                  export-ignore
+*.md                    export-ignore
+.babelrc                export-ignore
+webpack.config.js       export-ignore
+# exclude non-minified resources
+# includes/assets/js/*.js             export-ignore
+# includes/assets/js/min/*.js.map     export-ignore
+# includes/assets/css/*.css           export-ignore
+# includes/assets/css/min/*.css.map   export-ignore
