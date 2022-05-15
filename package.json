@@ -6,9 +6,17 @@
   "scripts": {
     "dev": "cross-env webpack --watch",
     "build": "cross-env NODE_ENV=production webpack --mode production",
-    "makepot": "wp i18n make-pot . languages/cpfg.pot",
-    "makejson": "wp i18n make-json languages",
-    "renamejson": "rename 's/(cpfg-[a-zA-Z_]+-)[^\\.]*(.json)/$1cpfg-block$2' languages/*"
+    "makepot": "wp i18n make-pot . languages/cpfg.pot && cp languages/cpfg.pot languages/cpfg-en_US.po",
+    "makejson": "wp i18n make-json languages --no-purge --pretty-print",
+    "wpbuild": "cross-env WP_COPY_PHP_FILES_TO_DIST=false NODE_ENV=production wp-scripts build",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "start": "wp-scripts start",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.17.3",

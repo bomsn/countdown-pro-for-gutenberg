@@ -1,135 +1,89 @@
 const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const defaultConfig = require( '@wordpress/scripts/config/webpack.config.js' );
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const defaultConfig = require('@wordpress/scripts/config/webpack.config.js');
+const { hasCssnanoConfig, hasPostCSSConfig } = require('@wordpress/scripts/utils');
+const postcssPlugins = require('@wordpress/postcss-plugins-preset');
+const isProduction = defaultConfig.mode === 'production';
 
-// Set different CSS extraction for editor only and common block styles
-const blocksCSSPlugin = new MiniCssExtractPlugin({
-  filename: './assets/css/blocks.css',
-});
-const editBlocksCSSPlugin = new MiniCssExtractPlugin({
-  filename: './assets/css/blocks.editor.css',
-});
 
+// Prepare CSS loaders
+const cssLoaders = [
+  {
+    loader: MiniCssExtractPlugin.loader,
+  },
+  {
+    loader: require.resolve('css-loader'),
+    options: {
+      sourceMap: !isProduction,
+      modules: {
+        auto: true,
+      },
+    },
+  },
+  {
+    loader: require.resolve('postcss-loader'),
+    options: {
+      // Provide a fallback configuration if there's not
+      // one explicitly available in the project.
+      ...(!hasPostCSSConfig() && {
+        postcssOptions: {
+          ident: 'postcss',
+          sourceMap: !isProduction,
+          plugins: isProduction
+            ? [
+              ...postcssPlugins,
+              require('cssnano')({
+                // Provide a fallback configuration if there's not
+                // one explicitly available in the project.
+                ...(!hasCssnanoConfig() && {
+                  preset: [
+                    'default',
+                    {
+                      discardComments: {
+                        removeAll: true,
+                      },
+                    },
+                  ],
+                }),
+              }),
+            ]
+            : postcssPlugins,
+        },
+      }),
+    },
+  },
+  {
+    loader: require.resolve('sass-loader'),
+    options: {
+      sourceMap: !isProduction,
+    },
+  },
+];
 
 module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  ...defaultConfig,
   entry: {
-    editor: { import: './blocks/index.js', filename: './js/blocks.editor.js' },
-    frontend: { import: './blocks/frontend.js', filename: './js/blocks.js' }
+    editor: { import: './blocks/index', filename: './js/blocks.editor.js' },
+    frontend: { import: './blocks/frontend', filename: './js/blocks.js' }
   },
   output: {
-    path: path.resolve(__dirname, 'assets'),
-    filename: '[name]',
+    filename: '[name].js',
+    path: path.resolve(process.cwd(), 'assets'),
   },
-  resolve: {
-    extensions: ['.js']
-  },
-  watch: 'production' !== process.env.NODE_ENV,
-  devtool: 'eval-cheap-source-map',
   module: {
+    ...defaultConfig.module,
     rules: [
+      defaultConfig.module.rules[0],
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
-      },
-      {
-        test: /style\.s?css$/,
+        test: /\.(sc|sa)ss$/,
         use: [
-          // { loader: blocksCSSPlugin.loader },
-          // { loader: 'raw-loader' },
-          // {
-          //   loader: 'postcss-loader',
-          //   options: {
-          //     plugins: [require('autoprefixer')],
-          //   },
-          // },
-          // "style-loader",
-          // "css-loader",
-          // {
-          //   loader: 'sass-loader',
-          //   options: {
-          //     // Prefer `dart-sass`
-          //     implementation: require("sass"),
-          //     sassOptions: {
-          //       outputStyle: 'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
-          //     }
-          //   },
-          // },
-          'style-loader',
-          {
-            loader: "css-loader",
-            options: {
-              import: true,
-              importLoaders: 1,
-              modules: true
-            },
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              plugins: () => [
-                require("autoprefixer")()
-              ],
-            },
-          },
-          'sass-loader',
+          ...cssLoaders,
+
         ],
-        resourceQuery: /raw/,
-        type: 'asset/source',
-      },
-      {
-        test: /editor\.s?css$/,
-        use: [
-          // { loader: editBlocksCSSPlugin.loader },
-          // { loader: 'raw-loader' },
-          // {
-          //   loader: 'postcss-loader',
-          //   options: {
-          //     plugins: [require('autoprefixer')],
-          //   },
-          // },
-          // "style-loader",
-          // "css-loader",
-          // {
-          //   loader: 'sass-loader',
-          //   options: {
-          //     // Prefer `dart-sass`
-          //     implementation: require("sass"),
-          //     sassOptions: {
-          //       outputStyle: 'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
-          //     }
-          //   },
-          // },
-          'style-loader',
-          {
-            loader: "css-loader",
-            options: {
-              import: true,
-              importLoaders: 1,
-              modules: true
-            },
-          },
-          {
-            loader: "postcss-loader",
-            options: {
-              plugins: () => [
-                require("autoprefixer")()
-              ],
-            },
-          },
-          'sass-loader',
-        ],
-        resourceQuery: /raw/,
-        type: 'asset/source',
       },
     ],
   },
   plugins: [
-    blocksCSSPlugin,
-    editBlocksCSSPlugin,
+    new MiniCssExtractPlugin({ filename: 'css/[name].css' }),
   ],
 };

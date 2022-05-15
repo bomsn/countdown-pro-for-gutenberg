@@ -1,0 +1,63 @@
+# Copyright (C) 2022 Ali Khallad
+# This file is distributed under the same license as the Countdown Pro for Gutenberg plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Countdown Pro for Gutenberg 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/countdown-pro-block\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-05-15T13:42:17+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: cpfg\n"
+
+#. Plugin Name of the plugin
+msgid "Countdown Pro for Gutenberg"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://plugins.wpali.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "The ultimate countdown block for Gutenberg, that help adding countdown functionality to your content easily."
+msgstr ""
+
+#. Author of the plugin
+msgid "Ali Khallad"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://wpali.com"
+msgstr ""
+
+#: assets/js/blocks.editor.js:1
+#: blocks/countdown/edit.js:275
+#: blocks/countdown/edit.js:351
+#: blocks/countdown/save.js:43
+msgid "Days"
+msgstr ""
+
+#: assets/js/blocks.editor.js:1
+#: blocks/countdown/edit.js:284
+#: blocks/countdown/edit.js:352
+#: blocks/countdown/save.js:44
+msgid "Hours"
+msgstr ""
+
+#: assets/js/blocks.editor.js:1
+#: blocks/countdown/edit.js:293
+#: blocks/countdown/edit.js:353
+#: blocks/countdown/save.js:45
+msgid "Minutes"
+msgstr ""
+
+#: assets/js/blocks.editor.js:1
+#: blocks/countdown/edit.js:302
+#: blocks/countdown/edit.js:354
+#: blocks/countdown/save.js:46
+msgid "Seconds"
+msgstr ""

@@ -34,7 +34,7 @@ function cpfg_editor_block_assets()
 
     // Define path for the js and css files
     $editor_js = '/assets/js/blocks.editor.js';
-    $editor_css = '/assets/css/blocks.editor.css';
+    $editor_css = '/assets/css/editor.css';
 
     // Enqueue the bundled block JS file
     wp_enqueue_script(
@@ -52,6 +52,10 @@ function cpfg_editor_block_assets()
         [],
         filemtime(plugin_dir_path(__FILE__) . $editor_css)
     );
+
+    if (function_exists('wp_set_script_translations')) {
+        wp_set_script_translations('cpfg-block-editor-js', 'cpfg', plugin_dir_path(__FILE__) . 'languages');
+    }
 }
 /**
  * Enqueue front end and editor Javascript and CSS
@@ -64,7 +68,7 @@ function cpfg_block_assets()
 
     // Define path for the js and css files
     $block_js = '/assets/js/blocks.js';
-    $block_css = '/assets/css/blocks.css';
+    $block_css = '/assets/css/style-frontend.css';
 
     // Enqueue the bundled block JS file
     wp_enqueue_script(
@@ -96,8 +100,4 @@ add_action('init', 'cpfg_init');
 function cpfg_init()
 {
     load_plugin_textdomain('cpfg', false, plugin_dir_path(__FILE__) . 'languages');
-
-    if (function_exists('wp_set_script_translations')) {
-        wp_set_script_translations('cpfg-block-js', 'cpfg', plugin_dir_path(__FILE__) . 'languages');
-    }
 }

@@ -40,10 +40,10 @@ export default function save( { attributes } ) {
 		<Fragment>
 		{ datetime ?
 			<div className={ classNames ? classNames : undefined } style={ {fontSize: fontsize + 'px'} } data-datetime={datetime}	data-message={message}	data-days={days}	data-hours={hours} data-minutes={minutes} data-seconds={seconds} data-animation={animation}  data-borderwidth={bordersize}>
-				{days ? <div className={'cpfg-counter cpfg-days'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ __( 'Days', 'cpfg' ) }</span></div></div> : '' }
-				{hours ? <div className={'cpfg-counter cpfg-hours'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ __( 'Hours', 'cpfg' ) }</span></div></div> : ''}
-				{minutes ? <div className={'cpfg-counter cpfg-minutes'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ __( 'Minutes', 'cpfg' ) }</span></div></div> : ''}
-				{seconds ? <div className={'cpfg-counter cpfg-seconds'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ __( 'Seconds', 'cpfg' ) }</span></div></div> : ''}
+				{days ? <div className={'cpfg-counter cpfg-days'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ window.wp.i18n.__( 'Days', 'cpfg' ) }</span></div></div> : '' }
+				{hours ? <div className={'cpfg-counter cpfg-hours'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ window.wp.i18n.__( 'Hours', 'cpfg' ) }</span></div></div> : ''}
+				{minutes ? <div className={'cpfg-counter cpfg-minutes'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ window.wp.i18n.__( 'Minutes', 'cpfg' ) }</span></div></div> : ''}
+				{seconds ? <div className={'cpfg-counter cpfg-seconds'}><div className={ 'cpfg-canvas' } style={ {backgroundColor: bgcolor} }><span class={'cpfg-digits'}>0</span><span className={'cpfg-label'}>{ window.wp.i18n.__( 'Seconds', 'cpfg' ) }</span></div></div> : ''}
 			</div> :
 			<div className={'cpfg-notice'}>{ __( 'Please specify a date & time.' ) }</div> }
 		</Fragment>
