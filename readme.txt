@@ -3,8 +3,8 @@ Contributors: alikhallad
 Tags: countdown, progress indicator, colorfull countdown, countdown block, countdown for gutenberg
 Requires at least: 4.9
 Requires PHP: 5.2
-Tested up to: 5.6
-Stable tag: 1.0
+Tested up to: 5.9.3
+Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -58,3 +58,7 @@ Yes, yes, there are options to enable or disable specific timer (days, hours, mi
 = 1.0.0 =
 * 2019-06-10
 * initial release
+
+= 1.0.1 =
+* Added translation support
+* Bug fixes and performance improvements

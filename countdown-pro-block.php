@@ -5,7 +5,7 @@
  * Plugin URI: https://plugins.wpali.com
  * Author: Ali Khallad
  * Author URI: https://wpali.com
- * Version: 1.0.0
+ * Version: 1.0.1
  * Description: The ultimate countdown block for Gutenberg, that help adding countdown functionality to your content easily.
  * Text Domain: cpfg
  *
@@ -21,7 +21,7 @@ if (!function_exists('register_block_type')) {
     return;
 }
 // Define the plugin's version
-define('CPFG_VERSION', '1.0.0');
+define('CPFG_VERSION', '1.0.1');
 
 /**
  * Enqueue back end Javascript and CSS on editor level
