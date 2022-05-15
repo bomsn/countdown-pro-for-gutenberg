@@ -1,5 +1,7 @@
 # exclude .gitignore and similar from the generated tarball
 .git*           export-ignore
+# exclude dev assets folder
+blocks*         export-ignore
 # exclude development files
 *.json                  export-ignore
 *.md                    export-ignore
